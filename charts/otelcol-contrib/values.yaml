@@ -1,0 +1,74 @@
+nameOverride: ""
+fullnameOverride: ""
+
+mode: deployment
+
+image:
+  repository: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib
+  pullPolicy: IfNotPresent
+  tag: "0.145.0"
+
+replicaCount: 2
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+service:
+  type: ClusterIP
+  annotations: {}
+  ports:
+    grpc: 4317
+    http: 4318
+
+config:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+
+  processors:
+    batch: {}
+
+  exporters:
+    otlp:
+      endpoint: tempo-distributor.monitoring.svc.cluster.local:4317
+      tls:
+        insecure: true
+
+  service:
+    pipelines:
+      traces:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [otlp]
+      metrics:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [otlp]
+      logs:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [otlp]
+
+extraArgs: []
+extraEnvs: []

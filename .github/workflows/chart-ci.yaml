@@ -1,0 +1,25 @@
+name: chart-ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint-and-template:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.4
+
+      - name: Helm lint
+        run: helm lint charts/otelcol-contrib
+
+      - name: Helm template validation
+        run: helm template otelcol-contrib charts/otelcol-contrib >/tmp/rendered.yaml

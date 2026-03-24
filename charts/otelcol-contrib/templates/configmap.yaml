@@ -57,7 +57,7 @@ metadata:
 {{- $_ := set $config "extensions" (dict) }}
 {{- end }}
 {{- $_ := set (get $config "extensions") "basicauth/client" (dict "client_auth" (dict "username" .Values.opensearchExporter.auth.username "password" .Values.opensearchExporter.auth.password)) }}
-{{- $_ := set $opensearch "auth" (dict "authenticator" "basicauth/client") }}
+{{- $_ := set (get $opensearch "http") "auth" (dict "authenticator" "basicauth/client") }}
 {{- if not (hasKey $config "service") }}
 {{- $_ := set $config "service" (dict) }}
 {{- end }}

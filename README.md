@@ -86,7 +86,7 @@ exporters:
       mode: ss4o
 ```
 
-如果开启 `opensearchExporter.auth.enabled=true`，chart 会自动增加 `basicauth/client` extension 并将其绑定到 `opensearch` exporter。
+如果开启 `opensearchExporter.auth.enabled=true`，chart 会自动增加 `basicauth/client` extension，并通过 `opensearch.http.auth.authenticator` 将其绑定到 exporter。
 
 注意：官方 `opensearchexporter` 当前支持 `traces` 和 `logs`，默认不为 `metrics` 创建 OpenSearch 导出 pipeline。
 
